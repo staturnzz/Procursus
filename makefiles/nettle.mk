@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 STRAPPROJECTS  += nettle
-NETTLE_VERSION := 3.8.1
+NETTLE_VERSION := 3.9.1
 DEB_NETTLE_V   ?= $(NETTLE_VERSION)
 
 nettle-setup: setup
@@ -20,6 +20,10 @@ nettle: nettle-setup libgmp10
 		$(DEFAULT_CONFIGURE_FLAGS) \
 		CC_FOR_BUILD='$(shell command -v cc) $(CFLAGS_FOR_BUILD)' \
 		CPP_FOR_BUILD='$(shell command -v cc) -E $(CPPFLAGS_FOR_BUILD)'
+ifeq (,$(findstring armv7,$(MEMO_TARGET)))
+	sleep 2 && sed -i.bak 's/config.m4 machine.m4 $$</config.m4 machine.m4 $$< | \
+		grep -v ".file" | grep -v ".arch" | grep -v ".fpu"/g' $(BUILD_WORK)/nettle/Makefile && sleep 2
+endif
 	+$(MAKE) -C $(BUILD_WORK)/nettle
 	+$(MAKE) -C $(BUILD_WORK)/nettle install \
 		DESTDIR=$(BUILD_STAGE)/nettle
