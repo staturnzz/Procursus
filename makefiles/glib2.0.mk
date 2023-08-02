@@ -7,6 +7,14 @@ GLIB2.0_MAJOR_V := 2.68
 GLIB2.0_VERSION := $(GLIB2.0_MAJOR_V).2
 DEB_GLIB2.0_V   ?= $(GLIB2.0_VERSION)-1
 
+ifeq (armv7, $(MEMO_ARCH))
+CPU_FAMILY = arm
+CPU = arm
+else
+CPU_FAMILY = $(shell echo $(GNU_HOST_TRIPLE) | cut -d- -f1)
+CPU = $(MEMO_ARCH)
+endif
+
 glib2.0-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://ftp.gnome.org/pub/gnome/sources/glib/$(GLIB2.0_MAJOR_V)/glib-$(GLIB2.0_VERSION).tar.xz)
 	$(call EXTRACT_TAR,glib-$(GLIB2.0_VERSION).tar.xz,glib-$(GLIB2.0_VERSION),glib2.0)
@@ -14,8 +22,8 @@ glib2.0-setup: setup
 	mkdir -p $(BUILD_WORK)/glib2.0/build
 
 	echo -e "[host_machine]\n \
-	cpu_family = '$(shell echo $(GNU_HOST_TRIPLE) | cut -d- -f1)'\n \
-	cpu = '$(MEMO_ARCH)'\n \
+	cpu_family = '$(CPU_FAMILY)'\n \
+	cpu = '$(CPU)'\n \
 	endian = 'little'\n \
 	system = 'darwin'\n \
 	[properties]\n \
