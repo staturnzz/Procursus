@@ -20,6 +20,8 @@ gnutls: gnutls-setup readline gettext libgcrypt libgmp10 libidn2 libunistring ne
 		$(DEFAULT_CONFIGURE_FLAGS) \
 		--disable-guile \
 		--enable-local-libopts \
+		CFLAGS_FOR_BUILD="-I$(BUILD_BASE)/usr/include -L$(BUILD_BASE)/usr/lib" \
+		CFLAGS="-I$(BUILD_BASE)/usr/include -L$(BUILD_BASE)/usr/lib" \
 		--with-default-trust-store-file=$(MEMO_PREFIX)/etc/ssl/certs/cacert.pem \
 		ac_cv_func_malloc_0_nonnull=yes \
 		ac_cv_func_realloc_0_nonnull=yes \
