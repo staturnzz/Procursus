@@ -16,6 +16,7 @@ darwintools:
 	@echo "Using previously built darwintools."
 else
 darwintools: darwintools-setup
+	sed -i.bak 's/CPU_SUBTYPE_ARM64E/((cpu_subtype_t)2)/g' $(BUILD_WORK)/darwintools/src/DeviceInfo.m
 	+$(MAKE) -C $(BUILD_WORK)/darwintools all \
 		FIRMWARE_MAINTAINER="$(DEB_MAINTAINER)" \
 		PREFIX="$(MEMO_PREFIX)" \
