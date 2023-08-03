@@ -17,6 +17,10 @@ gettext:
 else
 gettext: .SHELLFLAGS=-O extglob -c
 gettext: gettext-setup ncurses libunistring
+ifeq (armv7, $(MEMO_ARCH))
+	sed -i.bak 's/if @HAVE_POSIX_SPAWN@/if 0/g' $(BUILD_WORK)/gettext/gettext-tools/gnulib-lib/spawn.in.h
+	sed -i.bak '155s/if @REPLACE_POSIX_SPAWN@/if 0/' $(BUILD_WORK)/gettext/gettext-tools/gnulib-lib/spawn.in.h
+endif
 	cd $(BUILD_WORK)/gettext && ./configure -C \
 		$(DEFAULT_CONFIGURE_FLAGS) \
 		--disable-java \
